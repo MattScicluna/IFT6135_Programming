@@ -108,7 +108,7 @@ class Basset(nn.Module):
     def __init__(self):
         super(Basset, self).__init__()
 
-        self.dropout = ?
+        self.dropout = ?  # should be float
         self.num_cell_types = 164
 
         self.conv1 = nn.Conv2d(1, 300, (19, ?), stride=(1, 1), padding=(9, 0))
@@ -131,6 +131,16 @@ class Basset(nn.Module):
         self.fc3 = nn.Linear(?, self.num_cell_types)
 
     def forward(self, x):
+        """
+        Compute forward pass for the model.
+        nn.Module will automatically create the `.backward` method!
+
+        Note:
+            * You will have to use torch's functional interface to 
+              complete the forward method as it appears in the supplementary material
+            * There are additional batch norm layers defined in `__init__`
+              which you may or may not choose to use...
+        """
 
         # WRITE CODE HERE
         return 0
