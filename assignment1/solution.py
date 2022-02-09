@@ -67,6 +67,7 @@ class BassetDataset(Dataset):
           Change it to match what the model is expecting
           hint: https://pytorch.org/docs/stable/generated/torch.nn.Conv2d.html
         * The target must also be converted to float32
+        * When in doubt, look at the output of __getitem__ !
         """
 
         idx = self.ids[i]
@@ -139,8 +140,8 @@ def compute_fpr_tpr(y_true, y_pred):
     """
     Computes the False Positive Rate and True Positive Rate
     Args:
-        :param y_true: groundtruth labels (np.array of ints)
-        :param y_pred: model decisions (np.array of ints)
+        :param y_true: groundtruth labels (np.array of ints [0 or 1])
+        :param y_pred: model decisions (np.array of ints [0 or 1])
 
     :Return: dict with tpr, fpr (values are floats)
     """
@@ -156,12 +157,14 @@ def compute_fpr_tpr_dumb_model():
     Simulates a dumb model and computes the False Positive Rate and True Positive Rate
 
     :Return: dict with tpr_list, fpr_list.
-             These lists contain the tpr and fpr for different thresholds
+             These lists contain the tpr and fpr for different thresholds (k)
              fpr and tpr values in the lists should be floats
              Order the lists such that:
                  output['fpr_list'][0] corresponds to k=0.
-                 output['fpr_list'][1] corresponds to k=0.05 
+                 output['fpr_list'][1] corresponds to k=0.05
                  ...
+                 output['fpr_list'][-1] corresponds to k=0.95
+
             Do the same for output['tpr_list']
              
     """
@@ -177,12 +180,14 @@ def compute_fpr_tpr_smart_model():
     Simulates a smart model and computes the False Positive Rate and True Positive Rate
 
     :Return: dict with tpr_list, fpr_list.
-             These lists contain the tpr and fpr for different thresholds
+             These lists contain the tpr and fpr for different thresholds (k)
              fpr and tpr values in the lists should be floats
              Order the lists such that:
                  output['fpr_list'][0] corresponds to k=0.
-                 output['fpr_list'][1] corresponds to k=0.05 
+                 output['fpr_list'][1] corresponds to k=0.05
                  ...
+                 output['fpr_list'][-1] corresponds to k=0.95
+
             Do the same for output['tpr_list']
     """
     output = {'fpr_list': [], 'tpr_list': []}
@@ -232,7 +237,10 @@ def compute_auc(y_true, y_model):
     auc returned should be float
     Args:
         :param y_true: groundtruth labels (np.array of ints)
-        :param y_pred: model decisions (np.array of ints)
+        :param y_model: model outputs (np.array of float32 in [0, 1])
+
+    Note: if you set y_model as the output of solution.Basset, 
+    you need to transform it first!
     """
     output = {'auc': 0.}
 
@@ -265,9 +273,13 @@ def train_loop(model, train_dataloader, device, optimizer, criterion):
 
     :Returns: output dict with keys: total_score, total_loss
     values of each should be floats
-    (if you want to record losses or scores within the, you may print them to screen)
+    (if you want to display losses and/or scores within the loop, you may print them to screen)
 
     Make sure your loop works with arbitrarily small dataset sizes!
+
+    Note: you don’t need to compute the score after each training iteration.
+    If you do this, your training loop will be really slow!
+    You should instead compute it every 50 or so iterations and aggregate ...
     """
 
     output = {'total_score': 0.,
@@ -291,7 +303,7 @@ def valid_loop(model, valid_dataloader, device, optimizer, criterion):
 
     :Returns: output dict with keys: total_score, total_loss
     values of each should be floats
-    (if you want to record losses or scores within the, you may print them to screen)
+    (if you want to display losses and/or scores within the loop, you may print them to screen)
 
     Make sure your loop works with arbitrarily small dataset sizes!
     """
