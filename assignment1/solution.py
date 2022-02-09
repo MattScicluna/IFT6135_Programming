@@ -236,7 +236,7 @@ def compute_auc(y_true, y_model):
     Computes area under the ROC curve
     auc returned should be float
     Args:
-        :param y_true: groundtruth labels (np.array of ints)
+        :param y_true: groundtruth labels (np.array of ints [0 or 1])
         :param y_model: model outputs (np.array of float32 in [0, 1])
 
     Note: if you set y_model as the output of solution.Basset, 
