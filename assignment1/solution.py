@@ -139,7 +139,7 @@ class Basset(nn.Module):
             * You will have to use torch's functional interface to 
               complete the forward method as it appears in the supplementary material
             * There are additional batch norm layers defined in `__init__`
-              which you may or may not choose to use...
+              which you will want to use on your fully connected layers
         """
 
         # WRITE CODE HERE
