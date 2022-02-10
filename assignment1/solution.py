@@ -140,6 +140,7 @@ class Basset(nn.Module):
               complete the forward method as it appears in the supplementary material
             * There are additional batch norm layers defined in `__init__`
               which you will want to use on your fully connected layers
+            * Don't include the output activation here!
         """
 
         # WRITE CODE HERE
@@ -153,7 +154,8 @@ def compute_fpr_tpr(y_true, y_pred):
         :param y_true: groundtruth labels (np.array of ints [0 or 1])
         :param y_pred: model decisions (np.array of ints [0 or 1])
 
-    :Return: dict with tpr, fpr (values are floats)
+    :Return: dict with keys 'tpr', 'fpr'.
+             values are floats
     """
     output = {'fpr': 0., 'tpr': 0.}
 
@@ -166,7 +168,7 @@ def compute_fpr_tpr_dumb_model():
     """
     Simulates a dumb model and computes the False Positive Rate and True Positive Rate
 
-    :Return: dict with tpr_list, fpr_list.
+    :Return: dict with keys 'tpr_list', 'fpr_list'.
              These lists contain the tpr and fpr for different thresholds (k)
              fpr and tpr values in the lists should be floats
              Order the lists such that:
@@ -176,7 +178,7 @@ def compute_fpr_tpr_dumb_model():
                  output['fpr_list'][-1] corresponds to k=0.95
 
             Do the same for output['tpr_list']
-             
+
     """
     output = {'fpr_list': [], 'tpr_list': []}
 
@@ -189,7 +191,7 @@ def compute_fpr_tpr_smart_model():
     """
     Simulates a smart model and computes the False Positive Rate and True Positive Rate
 
-    :Return: dict with tpr_list, fpr_list.
+    :Return: dict with keys 'tpr_list', 'fpr_list'.
              These lists contain the tpr and fpr for different thresholds (k)
              fpr and tpr values in the lists should be floats
              Order the lists such that:
@@ -211,7 +213,7 @@ def compute_auc_both_models():
     """
     Simulates a dumb model and a smart model and computes the AUC of both
 
-    :Return: dict with auc_dumb_model, auc_smart_model.
+    :Return: dict with keys 'auc_dumb_model', 'auc_smart_model'.
              These contain the AUC for both models
              auc values in the lists should be floats
     """
@@ -226,13 +228,21 @@ def compute_auc_untrained_model(model, dataloader, device):
     """
     Computes the AUC of your input model
 
-    Dont forget to re-apply your output activation!
+    Args:
+        :param model: solution.Basset()
+        :param dataloader: torch.utils.data.DataLoader
+                           Where the dataset is solution.BassetDataset
+        :param device: torch.device
 
-    :Return: dict with auc_dumb_model, auc_smart_model.
-             These contain the AUC for both models
-             auc values should be floats
+    :Return: dict with key 'auc'.
+             This contains the AUC for the model
+             auc value should be float
 
-    Make sure this function works with arbitrarily small dataset sizes!
+    Notes:
+    * Dont forget to re-apply your output activation!
+    * Make sure this function works with arbitrarily small dataset sizes!
+    * You should collect all the targets and model outputs and then compute AUC at the end
+      (compute time should not be as much of a consideration here)
     """
     output = {'auc': 0.}
 
@@ -243,14 +253,16 @@ def compute_auc_untrained_model(model, dataloader, device):
 
 def compute_auc(y_true, y_model):
     """
-    Computes area under the ROC curve
-    auc returned should be float
+    Computes area under the ROC curve (using method described in main.ipynb)
     Args:
         :param y_true: groundtruth labels (np.array of ints [0 or 1])
         :param y_model: model outputs (np.array of float32 in [0, 1])
+    :Return: dict with key 'auc'.
+             This contains the AUC for the model
+             auc value should be float
 
     Note: if you set y_model as the output of solution.Basset, 
-    you need to transform it first!
+    you need to transform it before passing it here!
     """
     output = {'auc': 0.}
 
@@ -281,9 +293,10 @@ def train_loop(model, train_dataloader, device, optimizer, criterion):
         :param optimizer: torch.optim
         :param critereon: torch.nn (output of get_critereon)
 
-    :Returns: output dict with keys: total_score, total_loss
-    values of each should be floats
-    (if you want to display losses and/or scores within the loop, you may print them to screen)
+    :Return: total_score, total_loss.
+             float of model score (AUC) and float of model loss for the entire loop (epoch)
+             (if you want to display losses and/or scores within the loop, 
+             you may print them to screen)
 
     Make sure your loop works with arbitrarily small dataset sizes!
 
@@ -311,11 +324,15 @@ def valid_loop(model, valid_dataloader, device, optimizer, criterion):
         :param optimizer: torch.optim
         :param critereon: torch.nn (output of get_critereon)
 
-    :Returns: output dict with keys: total_score, total_loss
-    values of each should be floats
-    (if you want to display losses and/or scores within the loop, you may print them to screen)
+    :Return: total_score, total_loss.
+             float of model score (AUC) and float of model loss for the entire loop (epoch)
+             (if you want to display losses and/or scores within the loop, 
+             you may print them to screen)
 
     Make sure your loop works with arbitrarily small dataset sizes!
+    
+    Note: if it is taking very long to run, 
+    you may do simplifications like with the train_loop.
     """
 
     output = {'total_score': 0.,
