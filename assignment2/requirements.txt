@@ -1,0 +1,4 @@
+gradescope-utils>=0.4.0
+numpy>=1.19.0
+torch>=1.7.0
+tqdm>=4.49.0
