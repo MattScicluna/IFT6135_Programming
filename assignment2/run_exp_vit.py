@@ -55,13 +55,13 @@ def train(epoch, model, dataloader, optimizer, args):
         optimizer.zero_grad()
         
         imgs, labels = batch
-        log_probas = model(imgs)
+        logits = model(imgs)
         
 
-        loss = model.loss(log_probas, labels)
+        loss = model.loss(logits, labels)
         #print(loss)
         #losses.append(loss.item())
-        acc = (log_probas.argmax(dim=1) == labels).float().mean()
+        acc = (logits.argmax(dim=1) == labels).float().mean()
 
         loss.backward()
         optimizer.step()
@@ -97,11 +97,11 @@ def evaluate(epoch, model, dataloader, args, mode="val"):
             batch = to_device(batch, args.device)
 
             imgs, labels = batch
-            log_probas = model(imgs)
+            logits = model(imgs)
             
 
-            loss = model.loss(log_probas, labels)
-            acc = (log_probas.argmax(dim=1) == labels).float().mean()
+            loss = model.loss(logits, labels)
+            acc = (logits.argmax(dim=1) == labels).float().mean()
 
             epoch_accuracy += acc.item() / len(dataloader)
             epoch_loss += loss.item() / len(dataloader)
