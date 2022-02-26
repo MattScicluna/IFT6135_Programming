@@ -74,26 +74,17 @@ class MultiHeadedAttention(nn.Module):
         ----------
         queries (`torch.FloatTensor` of shape `(batch_size, num_heads, sequence_length, head_size)`)
             Tensor containing the queries for all the positions in the sequences
-            and all the heads. For example, `queries[1, 3, 5]` is the query of
-            the 4th head (index 3) for the 6th token (index 5) in the 2nd
-            sequence (index 1) in the batch (it is a vector of size `head_size`).
+            and all the heads.
 
         keys (`torch.FloatTensor` of shape `(batch_size, num_heads, sequence_length, head_size)`)
             Tensor containing the keys for all the positions in the sequences
-            and all the heads. For example, `keys[0, 2, 4]` is the key of the
-            3rd head (index 2) for the 5th token (index 4) in the 1st sequence
-            (index 0) in the batch (it is a vector of size `head_size`).
+            and all the heads. 
 
         Returns
         -------
         attention_weights (`torch.FloatTensor` of shape `(batch_size, num_heads, sequence_length, sequence_length)`)
             Tensor containing the attention weights for all the heads and all
-            the sequences in the batch. For example, `attention_weights[1, 3, 5, 7]`
-            is the attention weights from the 8th token (index 7) on the 6th
-            token (index 5) of the 4th head (index 3) in the 2nd sequence
-            (index 1) in the batch. Note that because we have a causal language
-            model here, `attention_weights[1, 3, 5, 7] == 0`, since the 8th token
-            should not influence on the 6th token (7 > 5).
+            the sequences in the batch.
         """
 
         # ==========================
@@ -123,30 +114,20 @@ class MultiHeadedAttention(nn.Module):
         ----------
         queries (`torch.FloatTensor` of shape `(batch_size, num_heads, sequence_length, head_size)`)
             Tensor containing the queries for all the positions in the sequences
-            and all the heads. For example, `queries[1, 3, 5]` is the query of
-            the 4th head (index 3) for the 6th token (index 5) in the 2nd
-            sequence (index 1) in the batch (it is a vector of size `head_size`).
+            and all the heads. 
 
         keys (`torch.FloatTensor` of shape `(batch_size, num_heads, sequence_length, head_size)`)
             Tensor containing the keys for all the positions in the sequences
-            and all the heads. For example, `keys[0, 2, 4]` is the key of the
-            3rd head (index 2) for the 5th token (index 4) in the 1st sequence
-            (index 0) in the batch (it is a vector of size `head_size`).
+            and all the heads. 
 
         values (`torch.FloatTensor` of shape `(batch_size, num_heads, sequence_length, head_size)`)
             Tensor containing the values for all the positions in the sequences
-            and all the heads. For example, `values[1, 3, 5]` is the key of the
-            4th head (index 3) for the 6th token (index 5) in the 2nd sequence
-            (index 1) in the batch (it is a vector of size `head_size`).
-
+            and all the heads. 
         Returns
         -------
         outputs (`torch.FloatTensor` of shape `(batch_size, sequence_length, num_heads * head_size)`)
             Tensor containing the concatenated outputs of the attention for all
-            the sequences in the batch, and all positions in each sequence. For
-            example, `outputs[0, 2]` contains the output of the attention
-            (concatenated for all heads) for the 3rd token (index 2) of the 1st
-            sequence in the batch (index 0).
+            the sequences in the batch, and all positions in each sequence. 
         """
 
         # ==========================
