@@ -352,7 +352,7 @@ class VisionTransformer(nn.Module):
             patch_size - Number of pixels per dimension of the patches (integer)
             flatten_channels - If True, the patches will be returned in a flattened format
                               as a feature vector instead of a image grid.
-        Output : torch.Tensor representing the sequence of shape [B,patches,patch_size*patch_size] for flattened.
+        Output : torch.Tensor representing the sequence of shape [B,patches,C*patch_size*patch_size] for flattened.
         """
         # ==========================
         # TODO: Write your code here
